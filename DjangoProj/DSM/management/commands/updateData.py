@@ -4,12 +4,15 @@ from DSM.models import *
 
 
 class Command(BaseCommand):
+    def formatID(self, i):
+        return "%04d" % (i)
+
     def handle(self, *args, **options):
         self.student2db()
         self.step2db()
 
     def student2db(self):
-        studentFile = '/home/yuguang/PycharmProjects/ygProj/DSM/data/rawData/ds960_tx/transaction_All_Data.txt'
+        studentFile = '../../Data/txt/ds960_tx_All_Data.txt'
 
         i = 0
         with open(studentFile, 'r') as infile:
@@ -23,7 +26,7 @@ class Command(BaseCommand):
                 print(i)
 
     def step2db(self):
-        stepFile = '/home/yuguang/PycharmProjects/ygProj/DSM/data/rawData/ds960_step_list.txt'
+        stepFile = '../../Data/txt/ds960_step_list.txt'
 
         with open(stepFile, 'r') as infile:
             next(infile)
@@ -38,7 +41,7 @@ class Command(BaseCommand):
                 if not Sequence.objects.filter(sequence_name=sn).exists():
                     sequence = Sequence()
                     sequence.sequence_id = 'Sequ' + \
-                        str(Sequence.objects.count() + 1)
+                        self.formatID((Sequence.objects.count() + 1))
                     sequence.sequence_name = sn
                     sequence.save()
 
@@ -46,7 +49,7 @@ class Command(BaseCommand):
                 un = unitTemp[1].strip()
                 if not Unit.objects.filter(unit_name=un, sequence=Sequence.objects.get(sequence_name=sn)).exists():
                     unit = Unit()
-                    unit.unit_id = 'Unit' + str(Unit.objects.count() + 1)
+                    unit.unit_id = 'Unit' + self.formatID((Unit.objects.count() + 1))
                     unit.unit_name = un
                     unit.sequence = Sequence.objects.get(sequence_name=sn)
                     unit.save()
@@ -57,7 +60,7 @@ class Command(BaseCommand):
 
                 if not Module.objects.filter(module_name=mn, unit=Unit.objects.get(unit_name=un)).exists():
                     module = Module()
-                    module.module_id = 'Modu' + str(Module.objects.count() + 1)
+                    module.module_id = 'Modu' + self.formatID((Module.objects.count() + 1))
                     module.module_name = mn
                     module.unit = Unit.objects.get(unit_name=un)
                     module.save()
@@ -66,7 +69,7 @@ class Command(BaseCommand):
                 if not Problem.objects.filter(problem_name=pn, module=Module.objects.get(module_name=mn)).exists():
                     problem = Problem()
                     problem.problem_id = "Prob" + \
-                        str(Problem.objects.count() + 1)
+                        self.formatID((Problem.objects.count() + 1))
                     problem.problem_name = pn
                     problem.module = Module.objects.get(module_name=mn)
                     problem.save()
@@ -78,7 +81,7 @@ class Command(BaseCommand):
                              'UpdateTextField': '3', 'UpdateCheckbox': '4', 'UpdateOrdering': '5', 'UpdateHotspotSingle': '6'}
                 if not Step.objects.filter(step_name=stepn, problem=Problem.objects.get(problem_name=pn)).exists():
                     step = Step()
-                    step.step_id = 'Step' + str(Step.objects.count() + 1)
+                    step.step_id = 'Step' + self.formatID((Step.objects.count() + 1))
                     step.step_name = stepn
                     step.step_type = stepTypes[stept]
                     step.problem = Problem.objects.get(problem_name=pn)

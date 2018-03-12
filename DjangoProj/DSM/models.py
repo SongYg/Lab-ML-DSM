@@ -37,7 +37,7 @@ class Unit(models.Model):
 class Module(models.Model):
     """Module table"""
     module_id = models.CharField(primary_key=True, max_length=30, default='-1')
-    module_name = models.CharField(max_length=10, default='-1')
+    module_name = models.CharField(max_length=100, default='-1')
     unit = models.ForeignKey(Unit)
 
     def __unicode__(self):
