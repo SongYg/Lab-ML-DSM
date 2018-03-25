@@ -4,12 +4,13 @@ from DSM.models import *
 
 
 class Command(BaseCommand):
+
     def formatID(self, i):
         return "%04d" % (i)
 
     def handle(self, *args, **options):
         self.student2db()
-        self.step2db()
+        # self.step2db()
 
     def student2db(self):
         studentFile = '../../Data/txt/ds960_tx_All_Data.txt'
@@ -33,6 +34,7 @@ class Command(BaseCommand):
             next(infile)
             for line in infile:
                 elements = line.strip().split('\t')
+                print(line)
 
                 hierarchy = elements[1].strip().split(',', 2)
 
@@ -49,7 +51,8 @@ class Command(BaseCommand):
                 un = unitTemp[1].strip()
                 if not Unit.objects.filter(unit_name=un, sequence=Sequence.objects.get(sequence_name=sn)).exists():
                     unit = Unit()
-                    unit.unit_id = 'Unit' + self.formatID((Unit.objects.count() + 1))
+                    unit.unit_id = 'Unit' + \
+                        self.formatID((Unit.objects.count() + 1))
                     unit.unit_name = un
                     unit.sequence = Sequence.objects.get(sequence_name=sn)
                     unit.save()
@@ -60,7 +63,8 @@ class Command(BaseCommand):
 
                 if not Module.objects.filter(module_name=mn, unit=Unit.objects.get(unit_name=un)).exists():
                     module = Module()
-                    module.module_id = 'Modu' + self.formatID((Module.objects.count() + 1))
+                    module.module_id = 'Modu' + \
+                        self.formatID((Module.objects.count() + 1))
                     module.module_name = mn
                     module.unit = Unit.objects.get(unit_name=un)
                     module.save()
@@ -81,7 +85,8 @@ class Command(BaseCommand):
                              'UpdateTextField': '3', 'UpdateCheckbox': '4', 'UpdateOrdering': '5', 'UpdateHotspotSingle': '6'}
                 if not Step.objects.filter(step_name=stepn, problem=Problem.objects.get(problem_name=pn)).exists():
                     step = Step()
-                    step.step_id = 'Step' + self.formatID((Step.objects.count() + 1))
+                    step.step_id = 'Step' + \
+                        self.formatID((Step.objects.count() + 1))
                     step.step_name = stepn
                     step.step_type = stepTypes[stept]
                     step.problem = Problem.objects.get(problem_name=pn)

@@ -7,6 +7,42 @@ from datetime import datetime
 from bisect import *
 
 
+def export_stu_step(filePath, outFilePath):
+    db = MySQLdb.connect('localhost', 'root', '123456', 'ygdsmdb')
+    cursor = db.cursor()
+    with open(filePath, 'rb') as infile, open(outFilePath, 'wb') as outfile:
+        next(infile)
+        writer = csv.writer(outfile)
+        writer.writerow(['result', 'student', 'step', 'trynum'])
+        i = 0
+        for line in infile:
+            i = i + 1
+            eles = line.strip().split('\t')
+            step = eles[19].strip().split(' ')
+            step = step[0].strip()
+            stud = eles[3].strip()
+            outcome = eles[22].strip()
+            attempt = eles[20].strip()
+            if step:
+                row = [''] * 4
+                sql = "select step_id from DSM_step where step_name = '%s'" % (
+                    step)
+                cursor.execute(sql)
+                result = cursor.fetchall()
+                step_id = result[0][0]
+                row[1] = stud
+                row[2] = step_id
+                result = 0
+                if outcome == 'CORRECT':
+                    result = 1
+                row[3] = attempt
+                row[0] = result
+                writer.writerow(row)
+                if i % 1000 == 0:
+                    print(i, row)
+    cursor.close()
+
+
 def export_csv_entry(filePath, outFilePath):
     db = MySQLdb.connect('localhost', 'root', '123456', 'ygdsmdb')
     cursor = db.cursor()
@@ -85,10 +121,13 @@ def test(infilePath):
 if __name__ == '__main__':
     filePath = '../../Data/txt/ds960_tx_All_Data.txt'
     outFilePath = '../../Data/csv/Stu_diff.csv'
-    export_csv_entry(filePath, outFilePath)
+    # export_csv_entry(filePath, outFilePath)
 
     mat_infile = '../../Data/csv/Stu_diff.csv'
     mat_outfile = '../../Data/csv/Stu_diff_mat.csv'
-    export_matrix(mat_infile, mat_outfile)
+    # export_matrix(mat_infile, mat_outfile)
 
+    stu_step_infile = '../../Data/txt/ds960_tx_All_Data.txt'
+    stu_step_outfile = '../../Data/csv/Stu_step.csv'
+    export_stu_step(filePath=stu_step_infile, outFilePath=stu_step_outfile)
     # test(mat_infile)
