@@ -1,6 +1,5 @@
 #-*- coding:utf-8 -*-
 import csv
-import MySQLdb
 import sys
 import numpy as np
 import pandas as pd
@@ -15,7 +14,8 @@ class DSM():
     def __init__(self, sourcePath, matPath, outDir, outFileName, n_latent_skills, n_skills):
         self.sourcePath = sourcePath
         self.matPath = matPath
-        self.outPath = outDir + outFileName
+        self.outPath = outDir
+        self.outFileName = outFileName
         self.n_latent_skills = n_latent_skills
         self.n_skills = n_skills
 
@@ -88,9 +88,7 @@ class DSM():
             if i % 1000 == 0:
                 print(datetime.now(), i, source_data.iloc[i])
 
-        outFile = self.outPath + \
-            ('latent_skills%dkmeans_skills%d' %
-             (self.n_latent_skills, self.n_skills)) + '.csv'
+        outFile = self.outPath + self.outFileName
         source_data.to_csv(outFile, index=False)
         print('OK')
 
