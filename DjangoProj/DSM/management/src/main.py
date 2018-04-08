@@ -12,10 +12,10 @@ from datetime import datetime
 class DSM():
     """docstring for DSM"""
 
-    def __init__(self, sourcePath, matPath, outPath, n_latent_skills, n_skills):
+    def __init__(self, sourcePath, matPath, outDir, outFileName, n_latent_skills, n_skills):
         self.sourcePath = sourcePath
         self.matPath = matPath
-        self.outPath = outPath
+        self.outPath = outDir + outFileName
         self.n_latent_skills = n_latent_skills
         self.n_skills = n_skills
 
@@ -59,7 +59,7 @@ class DSM():
         indexs = ['skill_' + str(i) for i in range(self.n_skills)]
         res.index = indexs
 
-        res.to_csv('../../../../../Data/csv/handle.csv')
+        # res.to_csv('../../../../../Data/csv/handle.csv')
         return res
 
     def output(self, source_data, skills_mat):
@@ -138,10 +138,17 @@ class mKmeans():
         m = kmeans.labels_
         return m
 
+
 if __name__ == '__main__':
-    sourcePath = "../../../../../Data/csv/Stu_step.csv"
-    matPath = "../../../../../Data/csv/Stu_diff_mat.csv"
-    outPath = "../../../../../Data/result/"
-    dsm = DSM(sourcePath=sourcePath, matPath=matPath,
-              outPath=outPath, n_latent_skills=20, n_skills=7)
-    dsm.run()
+    # sourcePath = "../../../../../Data/csv/Stu_step.csv"
+    # matPath = "../../../../../Data/csv/Stu_diff_mat.csv"
+    # outPath = "../../../../../Data/result/"
+    if len(sys.argv) == 7:
+        [sourcePath, matPath, outDir, outFileName, n_latent_skills, n_skills] = sys.argv[1:]
+        n_latent_skills = int(round(float(n_latent_skills)))
+        n_skills = int(round(float(n_skills)))
+        dsm = DSM(sourcePath=sourcePath, matPath=matPath,
+                  outDir=outDir, outFileName=outFileName, n_latent_skills=n_latent_skills, n_skills=n_skills)
+        dsm.run()
+    else:
+        print("para error")
