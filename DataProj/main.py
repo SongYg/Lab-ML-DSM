@@ -138,15 +138,21 @@ class mKmeans():
 
 
 if __name__ == '__main__':
-    # sourcePath = "../../../../../Data/csv/Stu_step.csv"
-    # matPath = "../../../../../Data/csv/Stu_diff_mat.csv"
-    # outPath = "../../../../../Data/result/"
-    if len(sys.argv) == 7:
-        [sourcePath, matPath, outDir, outFileName, n_latent_skills, n_skills] = sys.argv[1:]
-        n_latent_skills = int(round(float(n_latent_skills)))
-        n_skills = int(round(float(n_skills)))
-        dsm = DSM(sourcePath=sourcePath, matPath=matPath,
-                  outDir=outDir, outFileName=outFileName, n_latent_skills=n_latent_skills, n_skills=n_skills)
-        dsm.run()
-    else:
-        print("para error")
+    # 测试
+    sourcePath = "/home/syg/enve/data/Stu_step.csv"
+    matPath = "/home/syg/enve/data/csv/Stu_diff_mat.csv"
+    outDir = "/home/syg/enve/data/result/"
+    outFileName = "latent_skills_20_skills_7.csv"
+    dsm = DSM(sourcePath=sourcePath, matPath=matPath, outDir=outDir, outFileName=outFileName, n_latent_skills=20, n_skills=7)
+    dsm.run()
+
+    # shell调用
+    # if len(sys.argv) == 7:
+    #     [sourcePath, matPath, outDir, outFileName, n_latent_skills, n_skills] = sys.argv[1:]
+    #     n_latent_skills = int(round(float(n_latent_skills)))
+    #     n_skills = int(round(float(n_skills)))
+    #     dsm = DSM(sourcePath=sourcePath, matPath=matPath,
+    #               outDir=outDir, outFileName=outFileName, n_latent_skills=n_latent_skills, n_skills=n_skills)
+    #     dsm.run()
+    # else:
+    #     print("para error")
