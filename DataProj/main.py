@@ -139,7 +139,7 @@ class mKmeans():
 
 if __name__ == '__main__':
     # 测试
-    sourcePath = "/home/syg/enve/data/Stu_step.csv"
+    sourcePath = "/home/syg/enve/data/csv/Stu_step.csv"
     matPath = "/home/syg/enve/data/csv/Stu_diff_mat.csv"
     outDir = "/home/syg/enve/data/result/"
     outFileName = "latent_skills_20_skills_7.csv"
