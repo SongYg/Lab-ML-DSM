@@ -51,6 +51,9 @@ class DSM():
         # 大于等于均值则取1，否则取0
         res = np.where(average >= 0, 1, 0)
 
+        skills = latent_skills_steps.argmax(axis=0)
+        for j in range(len(skills)):
+            res[skill_labels[skills[j]], j] = 1
         # 转成dataframe格式
         res = pd.DataFrame(res)
         # 添加列名——step_ids
@@ -143,7 +146,8 @@ if __name__ == '__main__':
     matPath = "/home/syg/enve/data/csv/Stu_diff_mat.csv"
     outDir = "/home/syg/enve/data/result/"
     outFileName = "latent_skills_20_skills_7.csv"
-    dsm = DSM(sourcePath=sourcePath, matPath=matPath, outDir=outDir, outFileName=outFileName, n_latent_skills=20, n_skills=7)
+    dsm = DSM(sourcePath=sourcePath, matPath=matPath, outDir=outDir,
+              outFileName=outFileName, n_latent_skills=20, n_skills=7)
     dsm.run()
 
     # shell调用
