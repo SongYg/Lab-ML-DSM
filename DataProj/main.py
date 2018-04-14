@@ -1,4 +1,5 @@
 #-*- coding:utf-8 -*-
+import os
 import csv
 import sys
 import numpy as np
@@ -63,6 +64,8 @@ class DSM():
         res.index = indexs
 
         # res.to_csv('../../../../../Data/csv/handle.csv')
+        res.to_csv(os.path.join(self.outPath, 'handle.csv'))
+
         return res
 
     def output(self, source_data, skills_mat):
@@ -82,15 +85,15 @@ class DSM():
             skills_num = -1
             # print(skills)
             for j in skills:
-                if j == 1:
-                    skills_num += 1
+		skills_num += 1
+		if j == 1:
                     # source_data.iloc[
                     #     i, 4 + skills_num] = 'skill' + str(skills_num)
                     source_data.set_value(
                         i, 'skill' + str(skills_num), 'skill' + str(skills_num))
             if i % 1000 == 0:
-                print(datetime.now(), i, source_data.iloc[i])
-
+                # print(datetime.now(), i, source_data.iloc[i])
+		print(datetime.now(), i)
         outFile = self.outPath + self.outFileName
         source_data.to_csv(outFile, index=False)
         print('OK')
